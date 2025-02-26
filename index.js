@@ -14,7 +14,7 @@ app.get('/best', (req, res) => {
         year: '2006'
     });
 });
-app.post('/send', (req, res) => {
+app.post('/send', async (req, res) => {
     console.log('Received data:', req.body);
 
     const firstName = req.body.first_name || "Unknown";
@@ -85,8 +85,8 @@ app.post('/send', (req, res) => {
         redirect: 'follow'
     };
 
-    const urableResponse =  fetch("https://app.urable.com/api/v1/customers", requestOptions);
-    const urableResult = urableResponse.text();
+    const urableResponse =  await fetch("https://app.urable.com/api/v1/customers", requestOptions);
+    const urableResult = await urableResponse.text();
     console.log(urableResult);
 
     res.status(200).send({
