@@ -71,7 +71,7 @@ app.post('/send', async (req, res) => {
             "hex": "#2fd2a8"
         },
         "customData": [customData],
-        "notes": note + "Car Make: " +  carMake + "Service: " + serviceReq
+        "notes": note + " Car Make: " +  carMake || "N/A" + " Service: " + serviceReq || "N/A"
     
     });
     const urableHeaders = new Headers();
