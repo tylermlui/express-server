@@ -30,7 +30,7 @@ app.post('/send', (req, res) => {
     const contactType = req.body.contact_type || "New Lead";
     const note = req.body.Note || req.body["Any notes on the condition of your car, or the service you're wanting to book."] || '';
     const carMake = req.body['Car Make']  || ''
-    const serviceReq = req.body['Service you Require?'] || req.body
+    const serviceReq = req.body['Service You Require?'][0] || ''
     const customData = req.body[carMake, serviceReq]
 
     var raw = {
