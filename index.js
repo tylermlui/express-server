@@ -1,20 +1,10 @@
 const express = require('express');
-
 const app = express();
-const port = 3001; 
 const dotenv = require('dotenv');
 dotenv.config();
 app.use(express.json());
 
-app.listen(port, () => console.log("IT's alive"));
-
-app.get('/best', (req, res) => {
-    res.status(200).send({
-        vehicle: 'Honda Civic',
-        year: '2006'
-    });
-});
-app.post('/send', async (req, res) => {
+app.post('/create-opportunity', async (req, res) => {
     console.log('Received data:', req.body);
 
     const firstName = req.body.first_name || "Unknown";
@@ -35,7 +25,6 @@ app.post('/send', async (req, res) => {
     const notes = "Note: " + note + 
                   (carMake ? `\nCar Make: ${carMake}` : '') + 
                   (serviceReq ? `\nService: ${serviceReq}` : '');
-    // Creating the raw JSON object
 
     var raw = JSON.stringify({
         "type": "person",
@@ -95,68 +84,5 @@ app.post('/send', async (req, res) => {
     res.status(200).send({
         body: raw // this will include the entire JSON data sent by the webhook
     });
-
-
-});
-app.get('/hook', async (req, res) => {
-
-        var raw = JSON.stringify({
-            "type": "person",
-            "status": "new",
-            "firstName": "TES ANE",
-            "lastName": "TEST LAST",
-            "locations": [
-                {
-                    "label": "Home",
-                    "value": {
-                        "address": {
-                            "line1": "N/A",
-                            "line2": "",
-                            "city": "N/A",
-                            "state": "N/A",
-                            "country": "US"
-                        }
-                    }
-                }
-            ],
-            "phoneNumbers": [
-                {
-                    "label": "Mobile",
-                    "value": "8109090909"
-                }
-            ],
-            "emails": [
-                {
-                    "label": "Home",
-                    "value": "EMAIL"
-                }
-            ],
-            "origin": "LEAD",
-            "taxExempt": false,
-            "color": {
-                "name": "New Lead",
-                "hex": "#2fd2a8"
-            },
-            "customData": [],
-            "notes": "NOTES"
-        });
-
-        const urableHeaders = new Headers();
-        urableHeaders.append("Content-Type", "application/json");
-        urableHeaders.append("Authorization", process.env.URLABLE_API_KEY);
-
-        var requestOptions = {
-            method: 'POST',
-            headers: urableHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        const urableResponse = await fetch("https://app.urable.com/api/v1/customers", requestOptions);
-        const urableResult = await urableResponse.text();
-        console.log(urableResult);
-
-        res.status(200).json({ message: "Success", raw }); // Send response after fetch completes
-
 
 });
