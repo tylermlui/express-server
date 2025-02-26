@@ -36,8 +36,9 @@ app.post('/send', async (req, res) => {
     const customData = [carMake, serviceReq];
 
     // Construct notes field correctly with the fallback values for carMake and serviceReq
-    const notes = note + (carMake ? ` Car Make: ${carMake}` : '') + (serviceReq ? ` Service: ${serviceReq}` : '');
-
+    const notes = note + 
+                  (carMake ? `\nCar Make: ${carMake}` : '') + 
+                  (serviceReq ? `\nService: ${serviceReq}` : '');
     // Creating the raw JSON object
     var raw = JSON.stringify({
         "type": "person",
