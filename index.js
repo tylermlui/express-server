@@ -33,7 +33,7 @@ app.post('/send', (req, res) => {
     const serviceReq = req.body['Service You Require?'][0] || ''
     const customData = [carMake, serviceReq]
 
-    var raw = {
+    var raw = json.stringify({
         "type": "person",
         "status": "new",
         "firstName": firstName,
@@ -73,7 +73,7 @@ app.post('/send', (req, res) => {
         "customData": [customData],
         "notes": note
     
-    };
+    });
     res.status(200).send({
         body: raw // this will include the entire JSON data sent by the webhook
     });
