@@ -96,33 +96,13 @@ app.post('/send', (req, res) => {
     // res.status(200).json({ message: "Success", obj }); // Send response after fetch completes
 
 });
-app.post('/hook', async (req, res) => {
-    try {
-        console.log(req.body)
-        const leadconnectorHeaders = new Headers();
-        leadconnectorHeaders.append("Authorization", process.env.LEADCONNECTOR_API_KEY);
-        leadconnectorHeaders.append("Version", "2021-07-28");
-        leadconnectorHeaders.append("Accept", "application/json");
-
-        const options = {
-            method: 'GET',
-            headers: leadconnectorHeaders
-        };
-
-        const response = await fetch("https://services.leadconnectorhq.com/opportunities/" + req.body.id, options);
-        const obj = await response.json();  
-
-        console.log(obj); 
-
-        const myArray = (obj.opportunity.contact.name || "").split(" ");
-        const firstName = myArray[0] || "Unknown";
-        const lastName = myArray[1] || "Unknown";
+app.get('/hook', async (req, res) => {
 
         var raw = JSON.stringify({
             "type": "person",
             "status": "new",
-            "firstName": firstName,
-            "lastName": lastName,
+            "firstName": "TES ANE",
+            "lastName": "TEST LAST",
             "locations": [
                 {
                     "label": "Home",
@@ -140,23 +120,23 @@ app.post('/hook', async (req, res) => {
             "phoneNumbers": [
                 {
                     "label": "Mobile",
-                    "value": obj.opportunity.contact.phone || "None"
+                    "value": "8109090909"
                 }
             ],
             "emails": [
                 {
                     "label": "Home",
-                    "value": obj.opportunity.contact.email || "None"
+                    "value": "EMAIL"
                 }
             ],
-            "origin": obj.opportunity.source,
+            "origin": "LEAD",
             "taxExempt": false,
             "color": {
                 "name": "New Lead",
                 "hex": "#2fd2a8"
             },
             "customData": [],
-            "notes": obj.opportunity.name
+            "notes": "NOTES"
         });
 
         const urableHeaders = new Headers();
@@ -174,10 +154,7 @@ app.post('/hook', async (req, res) => {
         const urableResult = await urableResponse.text();
         console.log(urableResult);
 
-        res.status(200).json({ message: "Success", obj }); // Send response after fetch completes
+        res.status(200).json({ message: "Success", raw }); // Send response after fetch completes
 
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+
 });
