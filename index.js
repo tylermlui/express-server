@@ -86,3 +86,4 @@ app.post('/create-opportunity', async (req, res) => {
     });
 
 });
+module.exports = app;
