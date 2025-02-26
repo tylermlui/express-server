@@ -29,7 +29,9 @@ app.post('/send', (req, res) => {
     const phone = req.body.phone || "N/A";
     const contactType = req.body.contact_type || "New Lead";
     const note = req.body.Note || '';
-
+    const carMake = req.body['Car Make ']  || ''
+    const serviceReq = req.body['Service you Require?'] || ''
+    const customData = req.body[carMake, serviceReq]
 
     var raw = JSON.stringify({
         "type": "person",
@@ -68,7 +70,7 @@ app.post('/send', (req, res) => {
             "name": contactType,
             "hex": "#2fd2a8"
         },
-        "customData": [],
+        "customData": [customData],
         "notes": note
     
     });
