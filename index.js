@@ -75,8 +75,7 @@ app.post('/send', (req, res) => {
     
     };
     res.status(200).send({
-        message: 'Webhook data received successfully',
-        data: raw // this will include the entire JSON data sent by the webhook
+        body: raw // this will include the entire JSON data sent by the webhook
     });
 
     // const urableHeaders = new Headers();
