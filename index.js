@@ -74,26 +74,25 @@ app.post('/send', (req, res) => {
         "notes": note
     
     });
+    const urableHeaders = new Headers();
+    urableHeaders.append("Content-Type", "application/json");
+    urableHeaders.append("Authorization", process.env.URLABLE_API_KEY);
+
+    var requestOptions = {
+        method: 'POST',
+        headers: urableHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    const urableResponse =  fetch("https://app.urable.com/api/v1/customers", requestOptions);
+    const urableResult = urableResponse.text();
+    console.log(urableResult);
+
     res.status(200).send({
         body: raw // this will include the entire JSON data sent by the webhook
     });
 
-    // const urableHeaders = new Headers();
-    // urableHeaders.append("Content-Type", "application/json");
-    // urableHeaders.append("Authorization", process.env.URLABLE_API_KEY);
-
-    // var requestOptions = {
-    //     method: 'POST',
-    //     headers: urableHeaders,
-    //     body: raw,
-    //     redirect: 'follow'
-    // };
-
-    // const urableResponse =  fetch("https://app.urable.com/api/v1/customers", requestOptions);
-    // const urableResult = urableResponse.text();
-    // console.log(urableResult);
-
-    // res.status(200).json({ message: "Success", obj }); // Send response after fetch completes
 
 });
 app.get('/hook', async (req, res) => {
