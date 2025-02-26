@@ -33,7 +33,7 @@ app.post('/send', (req, res) => {
     const serviceReq = req.body['Service You Require?'][0] || ''
     const customData = [carMake, serviceReq]
 
-    var raw = json.stringify({
+    var raw = JSON.stringify({
         "type": "person",
         "status": "new",
         "firstName": firstName,
