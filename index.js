@@ -17,11 +17,83 @@ app.get('/best', (req, res) => {
 app.post('/send', (req, res) => {
     console.log('Received data:', req.body);
 
-    // Respond with the received body for confirmation (you can modify this as needed)
+    const firstName = req.body.first_name || "Unknown";
+    const lastName = req.body.last_name || "Unknown";
+    const location = req.body.location;
+    const address = location.address || "N/A";
+    const city = location.city || "N/A";
+    const state = location.state || "CA";
+    const country = location.country || "US";
+    const source = req.body.contact_source || "N/A";
+    const email = req.body.email || "N/A";
+    const phone = req.body.phone || "N/A";
+    const contactType = req.body.contact_type || "New Lead";
+    const note = req.body.Note || '';
+
+
+    var raw = JSON.stringify({
+        "type": "person",
+        "status": "new",
+        "firstName": firstName,
+        "lastName": lastName,
+        "locations": [
+            {
+                "label": "Home",
+                "value": {
+                    "address": {
+                        "line1": address,
+                        "line2": "",
+                        "city": city,
+                        "state": state,
+                        "country": country
+                    }
+                }
+            }
+        ],
+        "phoneNumbers": [
+            {
+                "label": "Mobile",
+                "value": phone
+            }
+        ],
+        "emails": [
+            {
+                "label": "Home",
+                "value": email
+            }
+        ],
+        "origin": source,
+        "taxExempt": false,
+        "color": {
+            "name": contactType,
+            "hex": "#2fd2a8"
+        },
+        "customData": [],
+        "notes": note
+    
+    });
     res.status(200).send({
         message: 'Webhook data received successfully',
-        data: req.body // this will include the entire JSON data sent by the webhook
+        data: raw // this will include the entire JSON data sent by the webhook
     });
+
+    // const urableHeaders = new Headers();
+    // urableHeaders.append("Content-Type", "application/json");
+    // urableHeaders.append("Authorization", process.env.URLABLE_API_KEY);
+
+    // var requestOptions = {
+    //     method: 'POST',
+    //     headers: urableHeaders,
+    //     body: raw,
+    //     redirect: 'follow'
+    // };
+
+    // const urableResponse =  fetch("https://app.urable.com/api/v1/customers", requestOptions);
+    // const urableResult = urableResponse.text();
+    // console.log(urableResult);
+
+    // res.status(200).json({ message: "Success", obj }); // Send response after fetch completes
+
 });
 app.post('/hook', async (req, res) => {
     try {
