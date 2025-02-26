@@ -3,7 +3,6 @@ const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
 app.use(express.json());
-
 app.post('/create-opportunity', async (req, res) => {
     console.log('Received data:', req.body);
 
@@ -25,6 +24,7 @@ app.post('/create-opportunity', async (req, res) => {
     const notes = "Note: " + note + 
                   (carMake ? `\nCar Make: ${carMake}` : '') + 
                   (serviceReq ? `\nService: ${serviceReq}` : '');
+    // Creating the raw JSON object
 
     var raw = JSON.stringify({
         "type": "person",
