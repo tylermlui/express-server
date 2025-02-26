@@ -32,14 +32,11 @@ app.post('/send', async (req, res) => {
     const carMake = req.body['Car Make'] || req.body['Car Make '] || ''; // Handling both cases
     const serviceReq = req.body['Service You Require?']?.[0] || ''; // Safe access to first element of array
 
-    // Custom data as an array
-    const customData = [carMake, serviceReq];
-
-    // Construct notes field correctly with the fallback values for carMake and serviceReq
-    const notes = note + 
+    const notes = "Note: " + note + 
                   (carMake ? `\nCar Make: ${carMake}` : '') + 
                   (serviceReq ? `\nService: ${serviceReq}` : '');
     // Creating the raw JSON object
+
     var raw = JSON.stringify({
         "type": "person",
         "status": "new",
@@ -77,7 +74,7 @@ app.post('/send', async (req, res) => {
             "name": contactType,
             "hex": "#2fd2a8"
         },
-        "customData": [customData],
+        "customData": [],
         "notes": notes || "N/A"  // Ensure notes is either constructed or defaulted to 'N/A'
     });
     const urableHeaders = new Headers();
