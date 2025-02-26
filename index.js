@@ -19,7 +19,7 @@ app.post('/send', async (req, res) => {
 
     const firstName = req.body.first_name || "Unknown";
     const lastName = req.body.last_name || "Unknown";
-    const location = req.body.location;
+    const location = req.body.location || {};  // Ensure location exists to avoid errors
     const address = location.address || "N/A";
     const city = location.city || "N/A";
     const state = location.state || "CA";
@@ -29,10 +29,16 @@ app.post('/send', async (req, res) => {
     const phone = req.body.phone || "N/A";
     const contactType = req.body.contact_type || "New Lead";
     const note = req.body.Note || req.body["Any notes on the condition of your car, or the service you're wanting to book."] || '';
-    const carMake = req.body['Car Make'] || req.body['Car Make '] || '';
-    const serviceReq = req.body['Service You Require?']?.[0] || '';
-    const customData = [carMake, serviceReq]
+    const carMake = req.body['Car Make'] || req.body['Car Make '] || ''; // Handling both cases
+    const serviceReq = req.body['Service You Require?']?.[0] || ''; // Safe access to first element of array
 
+    // Custom data as an array
+    const customData = [carMake, serviceReq];
+
+    // Construct notes field correctly with the fallback values for carMake and serviceReq
+    const notes = note + (carMake ? ` Car Make: ${carMake}` : '') + (serviceReq ? ` Service: ${serviceReq}` : '');
+
+    // Creating the raw JSON object
     var raw = JSON.stringify({
         "type": "person",
         "status": "new",
@@ -71,8 +77,7 @@ app.post('/send', async (req, res) => {
             "hex": "#2fd2a8"
         },
         "customData": [customData],
-        "notes": note + " Car Make: " +  carMake || "N/A" + " Service: " + serviceReq || "N/A"
-    
+        "notes": notes || "N/A"  // Ensure notes is either constructed or defaulted to 'N/A'
     });
     const urableHeaders = new Headers();
     urableHeaders.append("Content-Type", "application/json");
